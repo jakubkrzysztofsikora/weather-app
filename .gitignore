@@ -1,0 +1,48 @@
+# .NET
+*.dll
+*.exe
+*.pdb
+*.user
+*.suo
+*.cache
+*.log
+*.vs
+bin/
+obj/
+TestResults/
+[Tt]est[Rr]esult*/
+_ReSharper*/
+*.resharper*
+*.dotCover
+*.csproj.user
+*.bak
+*.cache
+*.dbmdl
+*.jfm
+*.sdf
+*.opensdf
+*.sln.docstates
+
+# Vue.js
+node_modules/
+/dist/
+/.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Visual Studio Code
+.vscode/

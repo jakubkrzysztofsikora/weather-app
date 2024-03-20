@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+        - PORT=80
+    ports:
+      - "3001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
