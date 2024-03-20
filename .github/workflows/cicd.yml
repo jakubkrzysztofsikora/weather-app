@@ -32,11 +32,23 @@ jobs:
           heroku_app_name: ${{ vars.HEROKU_APP_NAME_API }}
           heroku_email: ${{ vars.HEROKU_EMAIL }}
           usedocker: true
+          appdir: api
+          docker_build_args: |
+            ASPNETCORE_ENVIRONMENT
+            PORT
+        env:
+          ASPNETCORE_ENVIRONMENT: production
+          PORT: 80
 
-      - name: Deploy API to Heroku
+      - name: Deploy WebApp to Heroku
         uses: akhileshns/heroku-deploy@v3.13.15 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{ vars.HEROKU_APP_NAME_WEBAPP }}
           heroku_email: ${{ vars.HEROKU_EMAIL }}
           usedocker: true
+          appdir: webapp
+          docker_build_args: |
+            NODE_ENV
+        env:
+          NODE_ENV: production
