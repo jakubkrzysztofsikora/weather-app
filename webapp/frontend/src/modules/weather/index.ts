@@ -1,12 +1,20 @@
-import { defineComponent } from "vue";
-import WeatherContainer from "./WeatherContainer.vue"
-import { GetCities } from "./ports";
+import { defineComponent, provide } from 'vue'
+import WeatherContainer from './WeatherContainer.vue'
+import { GetCities, GetWeather, InjectionKeys } from './ports'
 
-export const initializeWeatherModule = (services: { getCities: GetCities}) => {
-    const props = { getCities: services.getCities };
-    return { container: defineComponent({
-        components: { WeatherContainer },
-        props,
-        template: '<WeatherContainer v-bind="$props" />'
-    }) };
+export const initializeWeatherModule = (services: {
+  getCities: GetCities
+  getWeather: GetWeather
+}) => {
+  return {
+    container: defineComponent({
+      name: 'WeatherContainerWrapper',
+      components: { WeatherContainer },
+      template: '<WeatherContainer />',
+      setup() {
+        provide(InjectionKeys.GetCities, services.getCities)
+        provide(InjectionKeys.GetWeather, services.getWeather)
+      }
+    })
+  }
 }

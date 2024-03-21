@@ -1,14 +1,10 @@
 <script setup lang="ts">
-
-const props = defineProps({
+defineProps({
   weatherModule: {
     type: Object,
     required: true
   }
-});
-
-console.log({...props})
-
+})
 </script>
 <template>
   <main>
