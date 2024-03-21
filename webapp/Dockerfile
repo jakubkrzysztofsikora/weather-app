@@ -1,13 +1,25 @@
-# build stage
-FROM node:lts-alpine as build-stage
+# Build stage for Vue.js app
+FROM node:lts-alpine as app-build-stage
 WORKDIR /app
-COPY package*.json ./
+COPY frontend/package*.json ./
 RUN npm install
-COPY . .
+COPY ./frontend .
 RUN npm run build
 
-# production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Production stage
+FROM node:lts-alpine as production-stage
+ARG PORT
+ENV PORT=${PORT}
+WORKDIR /app
+
+RUN mkdir ./frontend
+COPY --from=app-build-stage /app/dist ./frontend/dist
+
+# Copy package.json for dependencies (if any) and potential scripts
+COPY package*.json ./
+COPY tsconfig.json ./
+RUN npm install --only=production
+COPY server.ts ./
+
+EXPOSE ${PORT}
+CMD ["npm", "run", "serve"]

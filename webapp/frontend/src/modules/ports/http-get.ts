@@ -1,0 +1,1 @@
+export type HttpGet = <TResponse>(url: string) => Promise<TResponse>;
