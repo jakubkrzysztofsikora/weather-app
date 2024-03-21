@@ -20,7 +20,7 @@ jobs:
 
       - name: Build and test Webapp
         run: |
-          cd webapp
+          cd webapp/frontend
           npm ci
           npm run build
           npm test

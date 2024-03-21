@@ -1,27 +1,31 @@
-import express from 'express';
-import http from 'http';
-import path from 'path';
-import 'dotenv/config'
+import express from "express";
+import http from "http";
+import path from "path";
+import dotenv from "dotenv";
 
+dotenv.config({ path: path.join(__dirname, "./frontend/.env") });
 const app = express();
 
-app.use(express.static('assets'));
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+app.use(express.static("assets"));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend/dist/index.html"));
 });
-app.get('/assets/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/dist', req.url));
+app.get("/assets/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend/dist", req.url));
 });
 
 type Config = {
-    apiUrl: string;
+  apiUrl: string;
 };
 
-app.get('/config', (_req, res) => {
-    const config: Config = {
-        apiUrl: process.env.API_URL || 'http://localhost:3001',
-    };
-    res.json(config);
+app.get("/config", (_req, res) => {
+  const config: Config = {
+    apiUrl:
+      process.env.API_URL ||
+      process.env.VITE_API_URL ||
+      "http://localhost:3001",
+  };
+  res.json(config);
 });
 
 const PORT = process.env.PORT || 3000;
@@ -30,5 +34,5 @@ const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
