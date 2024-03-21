@@ -1,0 +1,1 @@
+export type { GetCities} from './get-cities';

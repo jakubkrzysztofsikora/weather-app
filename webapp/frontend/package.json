@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "module": "esnext",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -14,6 +15,7 @@
     "test": "echo \"Add tests! -> https://v3.vuejs.org/guide/unit-testing.html\""
   },
   "dependencies": {
+    "primevue": "^3.50.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
