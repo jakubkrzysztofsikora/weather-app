@@ -15,6 +15,8 @@ services:
     build:
       context: ./webapp
       dockerfile: Dockerfile
+      args:
+        - PORT=80
     ports:
       - "3000:80"
     environment:
