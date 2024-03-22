@@ -18,12 +18,18 @@ type Config = {
   apiUrl: string;
 };
 
+const removeTrailingSlash = (url: string) =>
+  url.endsWith("/") ? url.slice(0, -1) : url;
+
 app.get("/config", (_req, res) => {
+  const apiUrl = removeTrailingSlash(process.env.API_URL ||
+    process.env.VITE_API_URL ||
+    "http://localhost:3001");
   const config: Config = {
     apiUrl:
-      process.env.API_URL ||
+      (process.env.API_URL ||
       process.env.VITE_API_URL ||
-      "http://localhost:3001",
+      "http://localhost:3001"),
   };
   res.json(config);
 });
