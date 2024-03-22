@@ -8,7 +8,7 @@ remote:
 
 # Pick a unique app name
 
-export APP_NAME=my-terraform-backend
+export APP_NAME=my-terraform-backend (I used: weather-app-tf-backend)
 
 # Create the database
 
@@ -25,6 +25,8 @@ heroku addons:create heroku-postgresql:essential-2 --app $APP_NAME
 export DATABASE_URL=`heroku config:get DATABASE_URL --app $APP_NAME`
 terraform init -backend-config="conn_str=$DATABASE_URL"
 
-heroku authorizations:create --description weather-app
+heroku authorizations:create --description weather-app (github actions usage)
 
 local: dotnet user-secrets set "WeatherApiKey" ""
+
+update cors in appsettings

@@ -10,6 +10,10 @@ terraform {
 resource "heroku_app" "api" {
   name   = var.api_app_name
   region = var.location
+
+  config_vars = {
+    WeatherApiKey = var.weather_api_key
+  }
 }
 
 resource "heroku_app" "frontend" {
