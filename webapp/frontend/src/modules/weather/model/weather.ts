@@ -7,7 +7,7 @@ export type Weather = {
   timezoneId: string
   sunset: string
   sunrise: string
-  temperatureCelcius: number
+  temperatureCelsius: number
   description: {
     text: string
     icon: string

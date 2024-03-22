@@ -1,47 +1,48 @@
 <script setup lang="ts">
 import Skeleton from 'primevue/skeleton'
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { Weather } from '../model/weather'
 
 const { loading, weather } = defineProps<{ weather: Weather; loading: boolean }>()
 
-const currentLocalTime = ref<number>(weather.localTimeEpoch)
-const datetimeFormatted = ref<string>('')
+const currentDatetime = ref<Date>(weather.localTimeEpoch ? new Date(weather.localTimeEpoch * 1000) : new Date())
+const timezone = ref<string>('')
 
 onMounted(() => {
-  const timer = setInterval(() => {
-    currentLocalTime.value += 1
-  }, 1000)
+  let timer: NodeJS.Timeout
 
-  watch(currentLocalTime, () => {
-    const date = new Date(currentLocalTime.value * 1000)
-    const formatter = new Intl.DateTimeFormat('default', {
-      timeStyle: 'medium',
-      dateStyle: 'short',
-      timeZone: weather.timezoneId
-    })
-    datetimeFormatted.value = formatter.format(date)
-  })
+  timer = setInterval(() => {
+    timezone.value = weather.timezoneId
+    const currentLocalTime = new Date().getTime() / 1000
+      currentDatetime.value = new Date((currentLocalTime + 1) * 1000)
+    }, 1000)
 
   onUnmounted(() => {
-    clearInterval(timer)
+    if (timer) {
+      clearInterval(timer)
+    }
   })
 })
+
 
 //°C
 </script>
 <template>
   <div class="current-weather">
     <div class="current_weather__child icon">
-      <Skeleton v-if="loading" borderRadius="16px" height="inherit" />
+      <Skeleton v-if="loading || !weather" borderRadius="16px" height="inherit" />
       <img v-else :src="weather.description.icon" :alt="weather.description.text" />
     </div>
     <div class="current_weather__child description">
-      <Skeleton v-if="loading" height="2em" width="10em" />
-      <h1 v-else>{{ weather.temperatureCelcius }}°C</h1>
-      <Skeleton v-if="loading" height="1.5em" width="15em" />
-      <h2 v-else>{{ datetimeFormatted }}</h2>
+      <Skeleton v-if="loading || !weather" height="2em" width="10em" />
+      <h1 v-else>{{ weather.temperatureCelsius }}°C</h1>
+      <Skeleton v-if="loading || !weather" height="1.5em" width="15em" />
+      <h2 v-else>{{ currentDatetime?.toLocaleString('default', { timeZone: weather.timezoneId }) }}</h2>
     </div>
+
+  <p v-if="!loading || !weather">
+    Last updated: {{ new Date(weather.localTimeEpoch * 1000).toLocaleString() }}
+  </p>
   </div>
 </template>
 <style scoped>

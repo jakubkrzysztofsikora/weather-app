@@ -3,7 +3,7 @@ import { onMounted, ref, inject, watch } from 'vue'
 import AutoComplete from 'primevue/autocomplete'
 
 import type { City } from './model'
-import { InjectionKeys } from './ports'
+import { GetCities, GetWeather, InjectionKeys } from './ports'
 import { Weather } from './model/weather'
 import { CurrentWeather } from './components'
 
@@ -19,7 +19,7 @@ const weather = ref<Weather>({
   country: '',
   sunrise: '',
   sunset: '',
-  temperatureCelcius: 0,
+  temperatureCelsius: 0,
   description: {
     text: '',
     icon: ''
@@ -27,17 +27,17 @@ const weather = ref<Weather>({
   timezoneId: 'Europe/London',
   localTimeEpoch: 0
 } as Weather)
-const getCitiesService = inject(InjectionKeys.GetCities)
-const getWeatherService = inject(InjectionKeys.GetWeather)
+const getCitiesService = inject<GetCities>(InjectionKeys.GetCities)
+const getWeatherService = inject<GetWeather>(InjectionKeys.GetWeather)
 
 onMounted(() => {
-  getCitiesService().then((data) => (filteredCities.value = data))
+  getCitiesService?.().then((data) => (filteredCities.value = data))
 })
 
 watch(selectedCity, (newValue) => {
   if (newValue) {
     loadingWeather.value = true
-    getWeatherService(newValue.name)
+    getWeatherService?.(newValue.name)
       .then((data) => (weather.value = data))
       .finally(() => (loadingWeather.value = false))
   }
@@ -52,14 +52,14 @@ const search = (event) => {
   searchTimeout.value = setTimeout(async () => {
     if (event.query.trim().length) {
       loadingCities.value = true
-      filteredCities.value = await getCitiesService(event.query.toLowerCase())
+      filteredCities.value = await getCitiesService?.(event.query.toLowerCase())
       loadingCities.value = false
     } else {
       loadingCities.value = true
-      filteredCities.value = await getCitiesService()
+      filteredCities.value = await getCitiesService?.()
       loadingCities.value = false
     }
-  }, 250)
+  }, 1000)
 }
 </script>
 
@@ -76,12 +76,16 @@ const search = (event) => {
         @complete="search"
         placeholder="Pick a City"
       />
-      <CurrentWeather v-if="selectedCity" :weather="weather" :loading="loadingWeather" />
+      <CurrentWeather class="current-weather-container" v-if="selectedCity && filteredCities?.includes(selectedCity)" :weather="weather" :loading="loadingWeather" />
     </div>
   </main>
 </template>
 <style scoped>
 .city-dropdown {
   width: 100%;
+}
+
+.current-weather-container {
+    margin-top: 2em;
 }
 </style>

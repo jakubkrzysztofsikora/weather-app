@@ -7,7 +7,6 @@ export const initializeConfigModule = (services: {
 }): { get: () => Promise<Config> } => {
   return {
     get: async () => {
-      console.log(import.meta.env)
       return import.meta.env.MODE === 'development' && import.meta.env.DEV === true
         ? { apiUrl: import.meta.env.VITE_API_URL }
         : getConfig(services.httpGet)

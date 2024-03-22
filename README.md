@@ -26,3 +26,5 @@ export DATABASE_URL=`heroku config:get DATABASE_URL --app $APP_NAME`
 terraform init -backend-config="conn_str=$DATABASE_URL"
 
 heroku authorizations:create --description weather-app
+
+local: dotnet user-secrets set "WeatherApiKey" ""
