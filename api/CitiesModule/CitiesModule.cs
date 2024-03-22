@@ -27,7 +27,8 @@ public class CitiesModule : IModule
 
         _app.MapGet($"/{_rootPath}", async (context) =>
         {
-            await new NullObjectResponse<IEnumerable<City>>(cities.Select(cityName => new City { Name = cityName }), context).ToResponse();
+            string query = context.Request.Query["query"];
+            await new NullObjectResponse<IEnumerable<City>>(cities.Where(city => query == null ? true : city.StartsWith(query)).Select(cityName => new City { Name = cityName }), context).ToResponse();
         });
 
         return this;
