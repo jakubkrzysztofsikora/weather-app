@@ -35,7 +35,7 @@ onMounted(() => {
 })
 
 watch(selectedCity, (newValue) => {
-  if (newValue) {
+  if (newValue && filteredCities.value?.includes(newValue)) {
     loadingWeather.value = true
     getWeatherService?.(newValue.name)
       .then((data) => (weather.value = data))
