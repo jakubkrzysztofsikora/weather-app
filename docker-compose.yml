@@ -15,7 +15,7 @@ services:
   webapp:
     build:
       context: ./webapp
-      dockerfile: proxy-server/Dockerfile
+      dockerfile: Dockerfile
       args:
         - PORT=80
     ports:
