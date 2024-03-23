@@ -3,15 +3,15 @@ import http from "http";
 import path from "path";
 import dotenv from "dotenv";
 
-dotenv.config({ path: path.join(__dirname, "./frontend/.env") });
+dotenv.config({ path: path.join(__dirname, "../frontend/.env") });
 const app = express();
 
 app.use(express.static("assets"));
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 app.get("/assets/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/dist", req.url));
+  res.sendFile(path.join(__dirname, "../frontend/dist", req.url));
 });
 
 type Config = {
@@ -22,9 +22,9 @@ const removeTrailingSlash = (url: string) =>
   url.endsWith("/") ? url.slice(0, -1) : url;
 
 app.get("/config", (_req, res) => {
-  const apiUrl = removeTrailingSlash(process.env.API_URL ||
-    process.env.VITE_API_URL ||
-    "http://localhost:3001");
+  const apiUrl = removeTrailingSlash(
+    process.env.API_URL || process.env.VITE_API_URL || "http://localhost:3001"
+  );
   const config: Config = {
     apiUrl,
   };
