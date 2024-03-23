@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  build-and-test-api:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,12 +17,28 @@ jobs:
           dotnet build
           dotnet test
 
+  build-and-test-webapp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Build and test Webapp
         run: |
           cd webapp/frontend
           npm ci
           npm run build
           npm test
+
+  deploy-api:
+    needs: build-and-test-api
+    runs-on: ubuntu-latest
+    if: ${{ needs.build-and-test-api.result == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Deploy API to Heroku
         uses: akhileshns/heroku-deploy@v3.13.15 # This is the action
@@ -38,6 +54,15 @@ jobs:
         env:
           ASPNETCORE_ENVIRONMENT: production
           PORT: 80
+
+  deploy-webapp:
+    needs: build-and-test-webapp
+    runs-on: ubuntu-latest
+    if: ${{ needs.build-and-test-webapp.result == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Deploy WebApp to Heroku
         uses: akhileshns/heroku-deploy@v3.13.15 # This is the action
