@@ -7,6 +7,7 @@ import { GetCities, GetWeather, InjectionKeys } from './ports'
 import { Weather } from './model/weather'
 import { CurrentWeather } from './components'
 
+const debounceTime = ref<number>(1000)
 const selectedCity = ref<City>()
 const filteredCities = ref<City[]>()
 const searchTimeout = ref<NodeJS.Timeout | null>()
@@ -43,7 +44,12 @@ watch(selectedCity, (newValue) => {
   }
 })
 
-const search = (event) => {
+const search = (event: {
+  query: {
+    trim: () => { (): any; new (): any; length: any }
+    toLowerCase: () => string | undefined
+  }
+}) => {
   if (searchTimeout.value) {
     clearTimeout(searchTimeout.value)
     searchTimeout.value = null
@@ -59,7 +65,7 @@ const search = (event) => {
       filteredCities.value = await getCitiesService?.()
       loadingCities.value = false
     }
-  }, 1000)
+  }, debounceTime.value)
 }
 </script>
 
