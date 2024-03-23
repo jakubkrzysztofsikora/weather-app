@@ -15,7 +15,13 @@ jobs:
       - name: Build and test API
         run: |
           dotnet build
-          dotnet test
+          dotnet test --logger "trx;LogFileName=test_results.trx"
+
+      - name: Publish test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Results
+          path: test_results.trx
 
   build-and-test-webapp:
     runs-on: ubuntu-latest
