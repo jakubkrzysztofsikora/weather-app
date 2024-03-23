@@ -88,7 +88,7 @@ jobs:
           heroku_app_name: ${{ vars.HEROKU_APP_NAME_WEBAPP }}
           heroku_email: ${{ vars.HEROKU_EMAIL }}
           usedocker: true
-          appdir: webapp
+          appdir: webapp/proxy-server
           docker_build_args: |
             NODE_ENV
         env:
