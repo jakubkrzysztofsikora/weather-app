@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref, inject, watch } from 'vue'
-import AutoComplete from 'primevue/autocomplete'
+import AutoComplete, { AutoCompleteCompleteEvent } from 'primevue/autocomplete'
 
 import type { City } from './model'
 import { GetCities, GetWeather, InjectionKeys } from './ports'
 import { Weather } from './model/weather'
-import { CurrentWeather } from './components'
+import { CurrentWeather, WeatherTabs } from './components'
 
 const debounceTime = ref<number>(1000)
 const selectedCity = ref<City>()
@@ -44,12 +44,7 @@ watch(selectedCity, (newValue) => {
   }
 })
 
-const search = (event: {
-  query: {
-    trim: () => { (): any; new (): any; length: any }
-    toLowerCase: () => string | undefined
-  }
-}) => {
+const search = (event: AutoCompleteCompleteEvent) => {
   if (searchTimeout.value) {
     clearTimeout(searchTimeout.value)
     searchTimeout.value = null
@@ -86,6 +81,12 @@ const search = (event: {
         class="current-weather-container"
         v-if="selectedCity && filteredCities?.includes(selectedCity)"
         :weather="weather"
+        :loading="loadingWeather"
+      />
+      <WeatherTabs
+        v-if="selectedCity && filteredCities?.includes(selectedCity)"
+        :weather="weather"
+        :selectedCityName="selectedCity.name"
         :loading="loadingWeather"
       />
     </div>
