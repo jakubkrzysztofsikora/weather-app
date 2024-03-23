@@ -41,11 +41,12 @@ jobs:
           npm run build
           npm test
 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+      - name: Publish test result artifacts
+        uses: actions/upload-artifact@v2
         if: always()
         with:
-          files: ${{ github.workspace }}/webapp/frontend/**/test-output.json
+          name: test-output.json
+          path: ${{ github.workspace }}/webapp/frontend/**/test-output.json
 
   deploy-api:
     needs: build-and-test-api
