@@ -76,7 +76,12 @@ const search = (event) => {
         @complete="search"
         placeholder="Pick a City"
       />
-      <CurrentWeather class="current-weather-container" v-if="selectedCity && filteredCities?.includes(selectedCity)" :weather="weather" :loading="loadingWeather" />
+      <CurrentWeather
+        class="current-weather-container"
+        v-if="selectedCity && filteredCities?.includes(selectedCity)"
+        :weather="weather"
+        :loading="loadingWeather"
+      />
     </div>
   </main>
 </template>
@@ -86,6 +91,6 @@ const search = (event) => {
 }
 
 .current-weather-container {
-    margin-top: 2em;
+  margin-top: 2em;
 }
 </style>
