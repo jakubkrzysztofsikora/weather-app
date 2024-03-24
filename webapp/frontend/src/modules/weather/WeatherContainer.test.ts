@@ -8,10 +8,12 @@ import { Weather } from './model/weather'
 describe('WeatherContainer', () => {
   let getCitiesService: ReturnType<typeof vi.fn>
   let getWeatherService: ReturnType<typeof vi.fn>
+  let getMoreInfoLink: () => string
 
   beforeEach(() => {
     getCitiesService = vi.fn()
     getWeatherService = vi.fn()
+    getMoreInfoLink = () => 'https://www.weatherapi.com/weather/q/London'
   })
 
   it('should fetch cities on mount', async () => {
@@ -22,7 +24,8 @@ describe('WeatherContainer', () => {
       global: {
         provide: {
           [InjectionKeys.GetCities]: getCitiesService,
-          [InjectionKeys.GetWeather]: getWeatherService
+          [InjectionKeys.GetWeather]: getWeatherService,
+          [InjectionKeys.GetMoreInfoLink]: getMoreInfoLink
         }
       }
     })
@@ -51,7 +54,8 @@ describe('WeatherContainer', () => {
       global: {
         provide: {
           [InjectionKeys.GetCities]: getCitiesService,
-          [InjectionKeys.GetWeather]: getWeatherService
+          [InjectionKeys.GetWeather]: getWeatherService,
+          [InjectionKeys.GetMoreInfoLink]: getMoreInfoLink
         }
       },
       props: { debounceTime: 0, selectedCity: undefined as City | undefined }
@@ -78,7 +82,8 @@ describe('WeatherContainer', () => {
       global: {
         provide: {
           [InjectionKeys.GetCities]: getCitiesService,
-          [InjectionKeys.GetWeather]: getWeatherService
+          [InjectionKeys.GetWeather]: getWeatherService,
+          [InjectionKeys.GetMoreInfoLink]: getMoreInfoLink
         }
       },
       props: { debounceTime: 0 }
