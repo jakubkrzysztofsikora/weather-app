@@ -1,4 +1,5 @@
 export enum InjectionKeys {
   GetCities = 'getCities',
-  GetWeather = 'getWeather'
+  GetWeather = 'getWeather',
+  GetMoreInfoLink = 'getMoreInfoLink'
 }

@@ -13,3 +13,19 @@ export type Weather = {
     icon: string
   }
 }
+
+export const EmptyWeather: Weather = {
+  city: {
+    name: ''
+  },
+  country: '',
+  localTimeEpoch: 0,
+  timezoneId: 'Europe/London',
+  sunset: '',
+  sunrise: '',
+  temperatureCelsius: 0,
+  description: {
+    text: '',
+    icon: ''
+  }
+}

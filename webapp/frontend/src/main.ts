@@ -19,12 +19,15 @@ initializeConfigModule({
   .get()
   .then((config) => {
     const weatherModule = initializeWeatherModule({
-      getCities: (search) => fetch(
-        `${config.apiUrl}/cities${search ? `?query=${search}` : ""}`
-        )
-            .then((res) => res.json() as Promise<City[]>)
-            .then((cities: City[]) => [...cities.map((city) => ({...city, name: capitalize(city.name) }))]),
-      getWeather: (city: string) => fetch(`${config.apiUrl}/weather/${city}`).then((res) => res.json())
+      getCities: (search) =>
+        fetch(`${config.apiUrl}/cities${search ? `?query=${search}` : ''}`)
+          .then((res) => res.json() as Promise<City[]>)
+          .then((cities: City[]) => [
+            ...cities.map((city) => ({ ...city, name: capitalize(city.name) }))
+          ]),
+      getWeather: (city: string) =>
+        fetch(`${config.apiUrl}/weather/${city}`).then((res) => res.json()),
+      getMoreInfoLink: (city: string) => `https://www.weatherapi.com/weather/q/${city}`
     })
 
     app.use(initializeRouter({ weather: weatherModule }))

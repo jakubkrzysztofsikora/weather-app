@@ -1,10 +1,11 @@
 import { defineComponent, provide } from 'vue'
 import WeatherContainer from './WeatherContainer.vue'
-import { GetCities, GetWeather, InjectionKeys } from './ports'
+import { GetCities, GetMoreInfoLink, GetWeather, InjectionKeys } from './ports'
 
 export const initializeWeatherModule = (services: {
   getCities: GetCities
   getWeather: GetWeather
+  getMoreInfoLink: GetMoreInfoLink
 }) => {
   return {
     container: defineComponent({
@@ -14,6 +15,7 @@ export const initializeWeatherModule = (services: {
       setup() {
         provide(InjectionKeys.GetCities, services.getCities)
         provide(InjectionKeys.GetWeather, services.getWeather)
+        provide(InjectionKeys.GetMoreInfoLink, services.getMoreInfoLink)
       }
     })
   }

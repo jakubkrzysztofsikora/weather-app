@@ -2,9 +2,8 @@
 import { onMounted, ref, inject, watch } from 'vue'
 import AutoComplete, { AutoCompleteCompleteEvent } from 'primevue/autocomplete'
 
-import type { City } from './model'
-import { GetCities, GetWeather, InjectionKeys } from './ports'
-import { Weather } from './model/weather'
+import { EmptyWeather, type City, type Weather } from './model'
+import { GetCities, GetMoreInfoLink, GetWeather, InjectionKeys } from './ports'
 import { CurrentWeather, WeatherTabs } from './components'
 
 const debounceTime = ref<number>(1000)
@@ -13,23 +12,10 @@ const filteredCities = ref<City[]>()
 const searchTimeout = ref<NodeJS.Timeout | null>()
 const loadingCities = ref<boolean>(false)
 const loadingWeather = ref<boolean>(false)
-const weather = ref<Weather>({
-  city: {
-    name: ''
-  },
-  country: '',
-  sunrise: '',
-  sunset: '',
-  temperatureCelsius: 0,
-  description: {
-    text: '',
-    icon: ''
-  },
-  timezoneId: 'Europe/London',
-  localTimeEpoch: 0
-} as Weather)
+const weather = ref<Weather>(EmptyWeather)
 const getCitiesService = inject<GetCities>(InjectionKeys.GetCities)
 const getWeatherService = inject<GetWeather>(InjectionKeys.GetWeather)
+const getMoreInfoLinkService = inject<GetMoreInfoLink>(InjectionKeys.GetMoreInfoLink)
 
 onMounted(() => {
   getCitiesService?.().then((data) => (filteredCities.value = data))
@@ -86,7 +72,7 @@ const search = (event: AutoCompleteCompleteEvent) => {
       <WeatherTabs
         v-if="selectedCity && filteredCities?.includes(selectedCity)"
         :weather="weather"
-        :selectedCityName="selectedCity.name"
+        :moreInfoLink="getMoreInfoLinkService?.(selectedCity.name)"
         :loading="loadingWeather"
       />
     </div>

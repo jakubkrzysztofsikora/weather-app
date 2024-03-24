@@ -8,15 +8,14 @@ import { timeStringToNumber, numberToTimeSpan } from '../services'
 import { Weather } from '../model/weather'
 import { ref } from 'vue'
 
-const { weather, selectedCityName, loading } = defineProps<{
+const { weather, moreInfoLink, loading } = defineProps<{
   weather: Weather
-  selectedCityName: string
   loading: boolean
+  moreInfoLink: string
 }>()
 
 const ASTRONOMY_TAB_INDEX = 0
 const MORE_WEATHER_TAB_INDEX = 1
-const moreLink = `https://www.weatherapi.com/weather/q/${selectedCityName}`
 const currentTab = ref<number>(ASTRONOMY_TAB_INDEX)
 const tabs = ref<
   (weather: Weather) => { label: string; index: number; content: string; link?: string }[]
@@ -34,7 +33,7 @@ const tabs = ref<
     label: 'More',
     index: MORE_WEATHER_TAB_INDEX,
     content: "You're being redirected to the website with full weather information.",
-    link: moreLink
+    link: moreInfoLink
   }
 ])
 
@@ -43,11 +42,11 @@ const onTabClick = (e: TabViewClickEvent) => {
     return
   }
 
-  window.open(moreLink, '_blank')
+  window.open(moreInfoLink, '_blank')
 }
 </script>
 <template>
-  <TabView v-model:activeIndex="currentTab" @tab-click="onTabClick">
+  <TabView class="tabs" v-model:activeIndex="currentTab" @tab-click="onTabClick">
     <TabPanel v-for="tab in tabs(weather)" :key="tab.index" :header="tab.label">
       <p v-if="loading">
         <Skeleton class="skeleton" width="100%"></Skeleton>
@@ -61,6 +60,10 @@ const onTabClick = (e: TabViewClickEvent) => {
   </TabView>
 </template>
 <style scoped>
+.tabs {
+  margin-top: 1em;
+}
+
 .skeleton {
   margin-bottom: 0.5em;
   height: 1em;
