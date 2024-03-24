@@ -61,6 +61,7 @@ const search = (event: AutoCompleteCompleteEvent) => {
         :loading="loadingCities"
         :suggestions="filteredCities"
         @complete="search"
+        :completeOnFocus="true"
         placeholder="Pick a City"
       />
       <CurrentWeather
