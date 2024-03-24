@@ -10,7 +10,7 @@ public class CitiesModule : IModule
     private Action<LogLevel, string>? _log;
     private WebApplication? _app;
     private string _rootPath = "cities";
-    
+
     public async Task<IModule> InitializeAsync()
     {
         if (_getAvailableCitiesAsync == null)
@@ -27,7 +27,7 @@ public class CitiesModule : IModule
 
         _app.MapGet($"/{_rootPath}", async (context) =>
         {
-            string query = context.Request.Query["query"];
+            string? query = context.Request.Query["query"];
             await new NullObjectResponse<IEnumerable<City>>(cities.Where(city => query == null ? true : city.StartsWith(query)).Select(cityName => new City { Name = cityName }), context).ToResponse();
         });
 

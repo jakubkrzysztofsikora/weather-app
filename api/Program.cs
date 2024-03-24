@@ -33,6 +33,19 @@ app.UseCors(builder =>
            .AllowAnyHeader();
 });
 
+
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+{
+    app.UseExceptionHandler(exceptionHandlerApp
+    => exceptionHandlerApp.Run(async context
+        => await Results.Problem()
+                     .ExecuteAsync(context)));
+}
+else
+{
+    app.UseDeveloperExceptionPage();
+}
+
 await new Api.CitiesModule.CitiesModule()
     .WithAvailableCities(() => Task.FromResult(cities))
     .WithRoutes("cities", app)

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Api.WeatherModule.Ports;
 using static Api.Services.WeatherApiContract;
 
@@ -34,12 +35,13 @@ public class WeatherApiHttpClient : IWeatherApiHttpClient
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
             Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
         };
-        
+
         _jsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseToCamelCaseNamingPolicy();
     }
 
     public async Task<AstronomyDto> GetAstronomyDtoAsync(string city)
     {
+        city = SanatizeCityName(city);
         try
         {
             _log?.Invoke(LogLevel.Information, "Getting astronomy for city: " + city);
@@ -61,6 +63,7 @@ public class WeatherApiHttpClient : IWeatherApiHttpClient
 
     public async Task<CurrentWeatherDto> GetCurrentWeatherAsync(string city)
     {
+        city = SanatizeCityName(city);
         try
         {
             _log?.Invoke(LogLevel.Information, "Getting current weather for city: " + city);
@@ -85,6 +88,7 @@ public class WeatherApiHttpClient : IWeatherApiHttpClient
 
     public async Task<TimezoneDto> GetTimezoneDtoAsync(string city)
     {
+        city = SanatizeCityName(city);
         try
         {
             _log?.Invoke(LogLevel.Information, "Getting timezone for city: " + city);
@@ -110,5 +114,10 @@ public class WeatherApiHttpClient : IWeatherApiHttpClient
         public override string ConvertName(string name) =>
             string.Concat(name.Split('_').Select((word, index) =>
                 index > 0 ? char.ToUpper(word[0]) + word.Substring(1) : word.ToLower()));
+    }
+
+    private string SanatizeCityName(string city)
+    {
+        return Regex.Replace(city, @"[^A-Za-z]+", "");
     }
 }
